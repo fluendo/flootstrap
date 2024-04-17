@@ -29,5 +29,6 @@ $> flootstrap -l debug build examples/rootfs.toml
 ```
 
 ## TODO
+* [ ] Call the post-script after the rootfs is created
 * [ ] Add support for extra command line options when triggering the bootstrapper
 * [ ] Fix rinse error `Use of uninitialized value $CONFIG{"width"} in subtraction (-) at /usr/sbin/rinse line 1247`
