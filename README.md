@@ -10,11 +10,24 @@ not the system as a whole.
 
 ## Examples
 ```toml
-[rootfs]
-name = 'Debian Wheezy'
-flavor = 'wheezy'
-dir = 'debian-wheezy'
+[debian-bookworm]
+target = 'debian-bookworm'
+arch = 'amd64'
+dir = 'debian-bookworm-amd64'
+post_script = 'post-script.sh'
+
+[fedora-28]
+target = 'fedora-28'
+arch = 'amd64'
+dir = 'fedora-28-amd64'
 post_script = 'post-script.sh'
 ```
 
 ## Running
+```shell
+$> flootstrap -l debug build examples/rootfs.toml
+```
+
+## TODO
+* [ ] Add support for extra command line options when triggering the bootstrapper
+* [ ] Fix rinse error `Use of uninitialized value $CONFIG{"width"} in subtraction (-) at /usr/sbin/rinse line 1247`
