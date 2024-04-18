@@ -24,10 +24,20 @@ post_script = 'post-script.sh'
 ```
 
 ## Running
+### Listing available distributions and versions
+```shell
+$> flootstrap -l debug list
+```
+
+### Building the entries on the file
 ```shell
 $> flootstrap -l debug build examples/rootfs.toml
 ```
 
+### Running a command inside the rootfs
+```shell
+$> flootstrap -l debug run examples/rootfs.toml debian-bookworm /bin/bash
+```
 ## TODO
 * [ ] Add support for ENV variables in the toml definition
 * [ ] Call the post-script after the rootfs is created
