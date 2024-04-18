@@ -3,6 +3,7 @@ import re
 
 from flootstrap.bootstrapper import Bootstrapper
 from flootstrap.logger import logger
+from flootstrap.utils import execute_iter
 
 
 class Debootstrap(Bootstrapper):
@@ -14,7 +15,7 @@ class Debootstrap(Bootstrapper):
         # Check every file contents and check of either debian or ubuntu
         targets = []
         # Ubuntu
-        for line in cls.execute(
+        for line in execute_iter(
             ["grep", "-Rl", "ubuntu.com", "/usr/share/debootstrap/scripts/"]
         ):
             version = os.path.basename(line)
@@ -23,7 +24,7 @@ class Debootstrap(Bootstrapper):
                 continue
             targets.append(("ubuntu", version))
         # Debian
-        for line in cls.execute(
+        for line in execute_iter(
             ["grep", "-Rl", "debian-common", "/usr/share/debootstrap/scripts/"]
         ):
             version = os.path.basename(line)
@@ -44,11 +45,14 @@ class Debootstrap(Bootstrapper):
         else:
             version = texploded[1]
 
-        for line in cls.execute([cls.cmd, "--arch", arch, version, path], sudo=True):
+        for line in execute_iter([cls.cmd, "--arch", arch, version, path], sudo=True):
             # The log info is in the form
             # I: Keyring file not available at /usr/share/keyrings/debian-archive-keyring.gpg; switching to https mirror https://deb.debian.org/debian
             m = re.match(r"(?P<level>[IE]): (?P<message>.*)", line)
-            if m.group("level") == "I":
-                logger.info(m.group("message"))
-            elif m.group("level") == "E":
-                logger.error(m.group("message"))
+            if not m:
+                logger.debug(line)
+            else:
+                if m.group("level") == "I":
+                    logger.info(m.group("message"))
+                elif m.group("level") == "E":
+                    logger.error(m.group("message"))

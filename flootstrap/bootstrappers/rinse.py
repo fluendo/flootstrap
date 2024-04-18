@@ -1,5 +1,6 @@
 from flootstrap.bootstrapper import Bootstrapper
 from flootstrap.logger import logger
+from flootstrap.utils import execute_iter
 
 
 class Rinse(Bootstrapper):
@@ -9,7 +10,7 @@ class Rinse(Bootstrapper):
     def list(cls):
         skipped = False
         targets = []
-        for line in cls.execute([cls.cmd, "--list-distributions"]):
+        for line in execute_iter([cls.cmd, "--list-distributions"]):
             if not skipped:
                 skipped = True
                 continue
@@ -20,7 +21,7 @@ class Rinse(Bootstrapper):
 
     @classmethod
     def bootstrap(cls, target, arch, path):
-        for line in cls.execute(
+        for line in execute_iter(
             [cls.cmd, "--distribution", target, "--arch", arch, "--directory", path],
             sudo=True,
         ):
